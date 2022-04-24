@@ -11,14 +11,14 @@
     <PackageIcon>Notus_icon_gradient_bg.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>In this release, Nuget libraries have been updated.</PackageReleaseNotes>
+    <PackageReleaseNotes>In this release, Common library have been added.</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>1.0.1</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Notus.Token" Version="2.0.6" />
-    <PackageReference Include="Notus.Variable" Version="2.0.18" />
+    <PackageReference Include="Notus.Token" Version="2.0.7" />
+    <PackageReference Include="Notus.Variable" Version="2.0.20" />
     <PackageReference Include="Notus.Wallet" Version="2.0.14" />
   </ItemGroup>
 
