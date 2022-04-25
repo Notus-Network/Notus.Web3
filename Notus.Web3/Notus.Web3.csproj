@@ -13,12 +13,12 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>In this release, Common library have been added.</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Notus.Token" Version="2.0.7" />
-    <PackageReference Include="Notus.Variable" Version="2.0.20" />
+    <PackageReference Include="Notus.dApp" Version="1.0.4" />
+    <PackageReference Include="Notus.Prepare" Version="1.0.1" />
     <PackageReference Include="Notus.Wallet" Version="2.0.14" />
   </ItemGroup>
 

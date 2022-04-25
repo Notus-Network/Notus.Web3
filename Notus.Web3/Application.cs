@@ -1,8 +1,8 @@
 ﻿using System;
-
+using System.Text.Json;
 namespace Notus.Web3
 {
-    public class dApp
+    public class Application
     {
         private string Val_PrivateKeyHex;
         public string PrivateKeyHex
@@ -15,20 +15,21 @@ namespace Notus.Web3
         {
             //string PublicKeyHex = Notus.Wallet.ID.GetAddressWithPublicKey(PrivateKeyHex);
             string PublicKeyHex = Notus.Wallet.ID.Generate(PrivateKeyHex);
-            string TokenRawDataForSignText = Notus.Token.Generate.RawDataForSign(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
+            string TokenRawDataForSignText = Notus.dApp.RawData.ForSign(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
             string SignText = Notus.Wallet.ID.Sign(TokenRawDataForSignText, PrivateKeyHex);
-            Notus.Variable.Struct.BlockResponseStruct TokenResult = Notus.Token.Generate.Execute(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply);
+            Notus.Variable.Struct.BlockResponseStruct TokenResult = Notus.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply);
             return TokenResult;
         }
-        public static string Balance(string WalletKey)
+        public static Notus.Variable.Struct.WalletBalanceResponseStruct Balance(string WalletKey)
         {
-            string Result = Notus.Web3.Common.FindAvailableNode("balance/" + WalletKey + "/");
-            Console.WriteLine(Result);
-            return Result;
+            
+            string Result = Notus.dApp.Utility.FindAvailableNode("balance/" + WalletKey + "/");
+            Notus.Variable.Struct.WalletBalanceResponseStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Variable.Struct.WalletBalanceResponseStruct>(Result);
+            return tmpBalanceVal;
         }
         public static string AirDrop(string WalletKey)
         {
-            string Result=Notus.Web3.Common.FindAvailableNode("airdrop/" + WalletKey + "/");
+            string Result = Notus.dApp.Utility.FindAvailableNode("airdrop/" + WalletKey + "/");
             Console.WriteLine(Result);
             return Result;
             //WalletKey
