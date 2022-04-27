@@ -11,32 +11,32 @@ namespace Notus.Web3
             set { Val_PrivateKeyHex = value; }
         }
 
-        public static Notus.Variable.Struct.BlockResponseStruct GenerateToken(string PrivateKeyHex, Notus.Variable.Token.TokenInfoStruct Obj_TokenInfo, Notus.Variable.Token.SupplyStruct Obj_TokenSupply)
+        public static Notus.Core.Variable.BlockResponseStruct GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply)
         {
-            //string PublicKeyHex = Notus.Wallet.ID.GetAddressWithPublicKey(PrivateKeyHex);
-            string PublicKeyHex = Notus.Wallet.ID.Generate(PrivateKeyHex);
-            string TokenRawDataForSignText = Notus.dApp.RawData.ForSign(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
-            string SignText = Notus.Wallet.ID.Sign(TokenRawDataForSignText, PrivateKeyHex);
-            Notus.Variable.Struct.BlockResponseStruct TokenResult = Notus.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply);
+            //string PublicKeyHex = Notus.Core.Wallet.ID.GetAddressWithPublicKey(PrivateKeyHex);
+            string PublicKeyHex = Notus.Core.Wallet.ID.Generate(PrivateKeyHex);
+            string TokenRawDataForSignText = Notus.Core.SignRawData.TokenGenerate(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
+            string SignText = Notus.Core.Wallet.ID.Sign(TokenRawDataForSignText, PrivateKeyHex);
+
+            
+            Notus.Core.Variable.BlockResponseStruct TokenResult = Notus.Core.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply);
             return TokenResult;
         }
-        public static Notus.Variable.Struct.WalletBalanceResponseStruct Balance(string WalletKey)
-        {
-            
-            string Result = Notus.dApp.Utility.FindAvailableNode("balance/" + WalletKey + "/");
-            Notus.Variable.Struct.WalletBalanceResponseStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Variable.Struct.WalletBalanceResponseStruct>(Result);
+        public static Notus.Core.Variable.WalletBalanceResponseStruct Balance(string WalletKey)
+        {   
+            string tmpResult = Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/");
+            Notus.Core.Variable.WalletBalanceResponseStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Core.Variable.WalletBalanceResponseStruct>(tmpResult);
             return tmpBalanceVal;
         }
-        public static string AirDrop(string WalletKey)
+        public static Notus.Core.Variable.CryptoTransactionResult AirDrop(string WalletKey)
         {
-            string Result = Notus.dApp.Utility.FindAvailableNode("airdrop/" + WalletKey + "/");
-            Console.WriteLine(Result);
-            return Result;
-            //WalletKey
+            string tmpResult = Notus.Core.Function.FindAvailableNode("airdrop/" + WalletKey + "/");
+            Notus.Core.Variable.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResult>(tmpResult);
+            return tmpAirDrop;
         }
-        public static Notus.Variable.Struct.EccKeyPair GenerateKeyPair()
+        public static Notus.Core.Variable.EccKeyPair GenerateKeyPair()
         {
-            Notus.Variable.Struct.EccKeyPair GeneratedKeyPair = Notus.Wallet.ID.GenerateKeyPair();
+            Notus.Core.Variable.EccKeyPair GeneratedKeyPair = Notus.Core.Wallet.ID.GenerateKeyPair();
             return GeneratedKeyPair;
         }
     }
