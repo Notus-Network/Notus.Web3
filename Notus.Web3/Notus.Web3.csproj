@@ -13,7 +13,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>In this release, SignRawData function name have been changed to "MergeRawData"</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>3.0.5</Version>
+    <Version>3.0.6</Version>
   </PropertyGroup>
 
   <ItemGroup>
