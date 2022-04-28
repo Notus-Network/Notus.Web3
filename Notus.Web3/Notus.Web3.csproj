@@ -11,13 +11,13 @@
     <PackageIcon>Notus_icon_gradient_bg.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>In this release, updated functions to use async and await</PackageReleaseNotes>
+    <PackageReleaseNotes>In this release, SignRawData function name have been changed to "MergeRawData"</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>3.0.4</Version>
+    <Version>3.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Notus.Core" Version="3.0.8" />
+    <PackageReference Include="Notus.Core" Version="3.0.9" />
   </ItemGroup>
 
   <ItemGroup>
