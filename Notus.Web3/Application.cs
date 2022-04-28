@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text.Json;
+using System.Threading.Tasks;
+
 namespace Notus.Web3
 {
     public class Application
@@ -11,7 +13,7 @@ namespace Notus.Web3
             set { Val_PrivateKeyHex = value; }
         }
 
-        public static Notus.Core.Variable.BlockResponseStruct GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply)
+        public static async Task<Notus.Core.Variable.BlockResponseStruct> GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply)
         {
             //string PublicKeyHex = Notus.Core.Wallet.ID.GetAddressWithPublicKey(PrivateKeyHex);
             string PublicKeyHex = Notus.Core.Wallet.ID.Generate(PrivateKeyHex);
@@ -19,18 +21,18 @@ namespace Notus.Web3
             string SignText = Notus.Core.Wallet.ID.Sign(TokenRawDataForSignText, PrivateKeyHex);
 
             
-            Notus.Core.Variable.BlockResponseStruct TokenResult = Notus.Core.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply);
+            Notus.Core.Variable.BlockResponseStruct TokenResult = await Notus.Core.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply);
             return TokenResult;
         }
-        public static Notus.Core.Variable.WalletBalanceResponseStruct Balance(string WalletKey)
+        public static async Task<Notus.Core.Variable.WalletBalanceResponseStruct> Balance(string WalletKey)
         {   
-            string tmpResult = Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/");
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/");
             Notus.Core.Variable.WalletBalanceResponseStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Core.Variable.WalletBalanceResponseStruct>(tmpResult);
             return tmpBalanceVal;
         }
-        public static Notus.Core.Variable.CryptoTransactionResult AirDrop(string WalletKey)
+        public static async Task<Notus.Core.Variable.CryptoTransactionResult> AirDrop(string WalletKey)
         {
-            string tmpResult = Notus.Core.Function.FindAvailableNode("airdrop/" + WalletKey + "/");
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("airdrop/" + WalletKey + "/");
             Notus.Core.Variable.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResult>(tmpResult);
             return tmpAirDrop;
         }
