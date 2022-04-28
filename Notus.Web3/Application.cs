@@ -17,7 +17,7 @@ namespace Notus.Web3
         {
             //string PublicKeyHex = Notus.Core.Wallet.ID.GetAddressWithPublicKey(PrivateKeyHex);
             string PublicKeyHex = Notus.Core.Wallet.ID.Generate(PrivateKeyHex);
-            string TokenRawDataForSignText = Notus.Core.SignRawData.TokenGenerate(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
+            string TokenRawDataForSignText = Notus.Core.MergeRawData.TokenGenerate(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
             string SignText = Notus.Core.Wallet.ID.Sign(TokenRawDataForSignText, PrivateKeyHex);
 
             
