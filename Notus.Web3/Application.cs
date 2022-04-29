@@ -41,5 +41,21 @@ namespace Notus.Web3
             Notus.Core.Variable.EccKeyPair GeneratedKeyPair = Notus.Core.Wallet.ID.GenerateKeyPair();
             return GeneratedKeyPair;
         }
+
+        public static bool Bip39KeywordDoesExist(int indexNo, string keyword, bool isIndex)
+        {
+            if (isIndex)
+            {
+                if (Notus.Core.Variable.Bip39WordArray[indexNo] == keyword)
+                    return true;
+            } 
+            else
+            {
+                if (Array.IndexOf(Notus.Core.Variable.Bip39WordArray, keyword) != -1)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }
