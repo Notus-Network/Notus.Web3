@@ -12,7 +12,7 @@ namespace Notus.Web3
             get { return Val_PrivateKeyHex; }
             set { Val_PrivateKeyHex = value; }
         }
-        public class Wallets
+        public class LocalWalletList
         {
             public Notus.Core.Variable.EccKeyPair Wallet { get; set; }
             public string WalletName { get; set; }
