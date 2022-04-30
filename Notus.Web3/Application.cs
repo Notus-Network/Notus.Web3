@@ -17,7 +17,7 @@ namespace Notus.Web3
             public Notus.Core.Variable.EccKeyPair Wallet { get; set; }
             public string WalletName { get; set; }
             public string WalletImage { get; set; }
-            public string DaysAgo { get; set; }
+            public DateTime DaysAgo { get; set; }
         }
 
         public static async Task<Notus.Core.Variable.BlockResponseStruct> GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply)
