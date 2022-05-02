@@ -21,31 +21,30 @@ namespace Notus.Web3
             public DateTime DaysAgo { get; set; }
         }
 
-        public static async Task<Notus.Core.Variable.BlockResponseStruct> GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply)
+        public static async Task<Notus.Core.Variable.BlockResponseStruct> GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply, Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
         {
             //string PublicKeyHex = Notus.Core.Wallet.ID.GetAddressWithPublicKey(PrivateKeyHex);
             string PublicKeyHex = Notus.Core.Wallet.ID.Generate(PrivateKeyHex);
             string TokenRawDataForSignText = Notus.Core.MergeRawData.TokenGenerate(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
             string SignText = Notus.Core.Wallet.ID.Sign(TokenRawDataForSignText, PrivateKeyHex);
 
-            
-            Notus.Core.Variable.BlockResponseStruct TokenResult = await Notus.Core.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply);
+            Notus.Core.Variable.BlockResponseStruct TokenResult = await Notus.Core.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply, currentNetwork);
             return TokenResult;
         }
-        public static async Task<List<Notus.Core.Variable.CurrencyList>> GetCurrencyList(string WalletKey)
-        {   
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("currency/list/");
+        public static async Task<List<Notus.Core.Variable.CurrencyList>> GetCurrencyList(Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
+        {
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("currency/list/", currentNetwork);
             return JsonSerializer.Deserialize<List<Notus.Core.Variable.CurrencyList>>(tmpResult);
         }
-        public static async Task<Notus.Core.Variable.WalletBalanceResponseStruct> Balance(string WalletKey)
-        {   
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/");
+        public static async Task<Notus.Core.Variable.WalletBalanceResponseStruct> Balance(string WalletKey, Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
+        {
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/", currentNetwork);
             Notus.Core.Variable.WalletBalanceResponseStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Core.Variable.WalletBalanceResponseStruct>(tmpResult);
             return tmpBalanceVal;
         }
-        public static async Task<Notus.Core.Variable.CryptoTransactionResult> AirDrop(string WalletKey)
+        public static async Task<Notus.Core.Variable.CryptoTransactionResult> AirDrop(string WalletKey, Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("airdrop/" + WalletKey + "/");
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("airdrop/" + WalletKey + "/", currentNetwork);
             Notus.Core.Variable.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResult>(tmpResult);
             return tmpAirDrop;
         }
