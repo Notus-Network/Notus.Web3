@@ -11,9 +11,9 @@
     <PackageIcon>Notus_icon_gradient_bg.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>In this release, LocalWalletList class have been updated.</PackageReleaseNotes>
+    <PackageReleaseNotes>In this release, GetCurrencyList function have been added.</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>3.0.12</Version>
+    <Version>3.0.13</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Notus.Core" Version="3.0.15" />
+    <PackageReference Include="Notus.Core" Version="3.0.19" />
   </ItemGroup>
 
 </Project>

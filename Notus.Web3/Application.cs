@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -30,6 +31,11 @@ namespace Notus.Web3
             
             Notus.Core.Variable.BlockResponseStruct TokenResult = await Notus.Core.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply);
             return TokenResult;
+        }
+        public static async Task<List<string>> GetCurrencyList(string WalletKey)
+        {   
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("currency/list/");
+            return JsonSerializer.Deserialize<List<string>>(tmpResult);
         }
         public static async Task<Notus.Core.Variable.WalletBalanceResponseStruct> Balance(string WalletKey)
         {   
