@@ -36,7 +36,10 @@ namespace Notus.Web3
             string tmpResult = await Notus.Core.Function.FindAvailableNode("currency/list/", currentNetwork);
             return JsonSerializer.Deserialize<List<Notus.Core.Variable.CurrencyList>>(tmpResult);
         }
-        public static async Task<Notus.Core.Variable.WalletBalanceResponseStruct> Balance(string WalletKey, Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
+        public static async Task<Notus.Core.Variable.WalletBalanceResponseStruct> Balance(
+            string WalletKey, 
+            Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet
+        )
         {
             string tmpResult = await Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/", currentNetwork);
             Notus.Core.Variable.WalletBalanceResponseStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Core.Variable.WalletBalanceResponseStruct>(tmpResult);
