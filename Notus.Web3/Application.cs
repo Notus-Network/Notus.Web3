@@ -27,14 +27,14 @@ namespace Notus.Web3
             return JsonSerializer.Deserialize<List<Notus.Core.Variable.CurrencyList>>(tmpResult);
         }
         
-        public static async Task<Dictionary<string, Core.Variable.WalletBalanceResponseStruct>> Balance(
+        public static async Task<Dictionary<string, string>> Balance(
             string WalletKey, 
             Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet
         )
         {
             string tmpResult = await Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/", currentNetwork);
-            Dictionary<string, Core.Variable.WalletBalanceResponseStruct> tmpBalanceVal = JsonSerializer.Deserialize<Dictionary<string, Core.Variable.WalletBalanceResponseStruct>>(tmpResult);
-            return tmpBalanceVal;
+            Notus.Core.Variable.WalletBalanceStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Core.Variable.WalletBalanceStruct>(tmpResult);
+            return tmpBalanceVal.Balance;
         }
         
         public static async Task<Notus.Core.Variable.CryptoTransactionResult> AirDrop(string WalletKey, Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
