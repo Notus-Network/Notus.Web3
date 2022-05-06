@@ -43,13 +43,19 @@ namespace Notus.Web3
             Notus.Core.Variable.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResult>(tmpResult);
             return tmpAirDrop;
         }
+        public static async Task<Notus.Core.Variable.CryptoTransactionResultCode> GetStatus(string WalletKey, Notus.Core.Variable.NetworkType CurrentNetwork)
+        {
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("block/status/" + WalletKey + "/", CurrentNetwork);
+            Notus.Core.Variable.CryptoTransactionResultCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResultCode>(tmpResult);
+            return tmpAirDrop;
+        }
         
         public static Notus.Core.Variable.EccKeyPair GenerateKeyPair()
         {
             return Notus.Core.Wallet.ID.GenerateKeyPair();
         }
 
-        public static async Task<Notus.Core.Variable.BlockResponseStruct> GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply, Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
+        public static async Task<Notus.Core.Variable.BlockResponseStruct> GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply, Notus.Core.Variable.NetworkType currentNetwork)
         {
             //string PublicKeyHex = Notus.Core.Wallet.ID.GetAddressWithPublicKey(PrivateKeyHex);
             string PublicKeyHex = Notus.Core.Wallet.ID.Generate(PrivateKeyHex);
