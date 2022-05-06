@@ -43,10 +43,10 @@ namespace Notus.Web3
             Notus.Core.Variable.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResult>(tmpResult);
             return tmpAirDrop;
         }
-        public static async Task<Notus.Core.Variable.CryptoTransactionResultCode> GetStatus(string WalletKey, Notus.Core.Variable.NetworkType CurrentNetwork)
+        public static async Task<Notus.Core.Variable.BlockStatusCode> GetStatus(string WalletKey, Notus.Core.Variable.NetworkType CurrentNetwork)
         {
             string tmpResult = await Notus.Core.Function.FindAvailableNode("block/status/" + WalletKey + "/", CurrentNetwork);
-            Notus.Core.Variable.CryptoTransactionResultCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResultCode>(tmpResult);
+            Notus.Core.Variable.BlockStatusCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.BlockStatusCode>(tmpResult);
             return tmpAirDrop;
         }
         
