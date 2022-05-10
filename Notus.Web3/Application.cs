@@ -23,33 +23,40 @@ namespace Notus.Web3
 
         public static async Task<List<Notus.Core.Variable.CurrencyList>> GetCurrencyList(Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("currency/list/", currentNetwork);
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("currency/list/", currentNetwork, Notus.Core.Variable.NetworkLayer.Layer1);
             return JsonSerializer.Deserialize<List<Notus.Core.Variable.CurrencyList>>(tmpResult);
         }
-        
+
         public static async Task<Dictionary<string, string>> Balance(
-            string WalletKey, 
+            string WalletKey,
             Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet
         )
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/", currentNetwork);
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/", currentNetwork, Notus.Core.Variable.NetworkLayer.Layer1);
             Notus.Core.Variable.WalletBalanceStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Core.Variable.WalletBalanceStruct>(tmpResult);
             return tmpBalanceVal.Balance;
         }
-        
+
         public static async Task<Notus.Core.Variable.CryptoTransactionResult> AirDrop(string WalletKey, Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("airdrop/" + WalletKey + "/", currentNetwork);
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("airdrop/" + WalletKey + "/", currentNetwork, Notus.Core.Variable.NetworkLayer.Layer1);
             Notus.Core.Variable.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResult>(tmpResult);
             return tmpAirDrop;
         }
-        public static async Task<Notus.Core.Variable.BlockStatusCode> GetStatus(string WalletKey, Notus.Core.Variable.NetworkType CurrentNetwork)
+        public static async Task<Notus.Core.Variable.BlockStatusCode> GetStatus(string WalletKey, Notus.Core.Variable.NetworkType CurrentNetwork, Notus.Core.Variable.NetworkLayer CurrentLayer = Notus.Core.Variable.NetworkLayer.Layer1)
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("block/status/" + WalletKey + "/", CurrentNetwork);
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("block/status/" + WalletKey + "/", CurrentNetwork, CurrentLayer);
             Notus.Core.Variable.BlockStatusCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.BlockStatusCode>(tmpResult);
             return tmpAirDrop;
         }
-        
+
+        public static async Task<Notus.Core.Variable.BlockStatusCode> StoreData(string PrivateKeyHex, Notus.Core.Variable.NetworkType CurrentNetwork)
+        {
+            string tmpResult = await Notus.Core.Function.FindAvailableNode("storage/add/", CurrentNetwork, Notus.Core.Variable.NetworkLayer.Layer2);
+            Notus.Core.Variable.BlockStatusCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.BlockStatusCode>(tmpResult);
+            return tmpAirDrop;
+        }
+
         public static Notus.Core.Variable.EccKeyPair GenerateKeyPair()
         {
             return Notus.Core.Wallet.ID.GenerateKeyPair();
