@@ -11,9 +11,9 @@
     <PackageIcon>Notus_icon_gradient_bg.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>In this release, Layer options have been added.</PackageReleaseNotes>
+    <PackageReleaseNotes>In this release, Notus.Core has been updated.</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>3.0.27</Version>
+    <Version>3.0.28</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Notus.Core" Version="3.0.38" />
+    <PackageReference Include="Notus.Core" Version="3.0.66" />
   </ItemGroup>
 
 </Project>
