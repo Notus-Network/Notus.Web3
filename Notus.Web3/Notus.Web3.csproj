@@ -11,9 +11,9 @@
     <PackageIcon>Notus_icon_gradient_bg.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>In this release, Notus.Core has been updated.</PackageReleaseNotes>
+    <PackageReleaseNotes>In this release, Summaries have been added.</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>3.0.28</Version>
+    <Version>3.0.29</Version>
   </PropertyGroup>
 
   <ItemGroup>

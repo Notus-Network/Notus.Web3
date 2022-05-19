@@ -121,11 +121,10 @@ namespace Notus.Web3
         /// <param name="PrivateKeyHex">Private key of the main wallet.</param>
         /// <param name="Obj_TokenInfo">The local variable to store name, tag and logo variables.</param>
         /// <param name="Obj_TokenSupply">The local variable to store supply, decimal and resupplyable variables.</param>
-        /// <param name="currentNetwork">Current Network for Request</param>
+        /// <param name="currentNetwork">Current Network for Request.</param>
         /// <returns>Returns <see cref="Notus.Core.Variable.BlockResponseStruct"/>.</returns>
         public static async Task<Notus.Core.Variable.BlockResponseStruct> GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply, Notus.Core.Variable.NetworkType currentNetwork)
         {
-            //string PublicKeyHex = Notus.Core.Wallet.ID.GetAddressWithPublicKey(PrivateKeyHex);
             string PublicKeyHex = Notus.Core.Wallet.ID.Generate(PrivateKeyHex);
             string TokenRawDataForSignText = Notus.Core.MergeRawData.TokenGenerate(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
             string SignText = Notus.Core.Wallet.ID.Sign(TokenRawDataForSignText, PrivateKeyHex);
