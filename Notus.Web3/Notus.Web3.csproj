@@ -11,7 +11,7 @@
     <PackageIcon>Notus_icon_gradient_bg.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageReleaseNotes>In this release, StoreFileOnChain function have been added.</PackageReleaseNotes>
+    <PackageReleaseNotes>In this release, Nuget Library have been updated.</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
     <Version>3.0.33</Version>
   </PropertyGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Notus.Core" Version="3.0.73" />
+    <PackageReference Include="Notus.Core" Version="3.0.74" />
   </ItemGroup>
 
 </Project>
