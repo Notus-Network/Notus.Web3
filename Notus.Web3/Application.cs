@@ -10,7 +10,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Notus.Web3
@@ -101,12 +104,204 @@ namespace Notus.Web3
         /// <summary>
         /// TO DO.
         /// </summary>
-        public static async Task<Notus.Core.Variable.BlockStatusCode> StoreData(string PrivateKeyHex, Notus.Core.Variable.NetworkType CurrentNetwork)
+        public static Notus.Core.Variable.BlockStatusCode StoreFileOnChain(string PrivateKeyHex, string FileAddress, bool LocalFile, Notus.Core.Variable.NetworkType CurrentNetwork=Core.Variable.NetworkType.MainNet)
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("storage/add/", CurrentNetwork, Notus.Core.Variable.NetworkLayer.Layer2);
-            Notus.Core.Variable.BlockStatusCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.BlockStatusCode>(tmpResult);
-            return tmpAirDrop;
+            int sleepTime = 2500;
+            byte errorCountForSleepTime = 0;
+
+            using MemoryStream ms = new MemoryStream();
+            string fileName = "";
+            if (LocalFile == false)
+            {
+                WebClient client = new WebClient();
+                Stream imgstream = client.OpenRead(FileAddress);
+
+                byte[] buffer = new byte[4096];
+                int read;
+                while ((read = imgstream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                fileName = System.IO.Path.GetFileName(new Uri(FileAddress).LocalPath);
+            }
+            else
+            {
+                fileName = System.IO.Path.GetFileName(FileAddress);
+                using (FileStream file = new FileStream(FileAddress, FileMode.Open, FileAccess.Read))
+                {
+                    byte[] bytes = new byte[file.Length];
+                    file.Read(bytes, 0, (int)file.Length);
+                    ms.Write(bytes, 0, (int)file.Length);
+                }
+            }
+            byte[] fileArray = ms.ToArray();
+            uint fileSize = (uint)ms.Length;
+
+            Notus.Core.Variable.StorageOnChainStruct storageObj = new Notus.Core.Variable.StorageOnChainStruct()
+            {
+                Name = fileName,
+                Size = fileSize,
+                Hash = new Notus.Hash().CommonHash("sasha", ms.ToArray()),
+                Encrypted = false,
+                PublicKey = Notus.Core.Wallet.ID.Generate(PrivateKeyHex),
+                Sign = "",
+                Balance = new Notus.Core.Variable.BalanceAfterBlockStruct()
+                {
+                    Wallet = "",
+                    Balance = new Dictionary<string, string>(),
+                    Fee = "0",
+                    RowNo = 0,
+                    UID = ""
+                }
+            };
+            storageObj.Sign = Notus.Core.Wallet.ID.Sign(Notus.Core.MergeRawData.StorageOnChain(storageObj), PrivateKeyHex);
+
+            string responseData = Notus.Core.Function.FindAvailableNodeSync(
+                "storage/file/new",
+                new Dictionary<string, string>()
+                {
+                    {
+                        "data",
+                        JsonSerializer.Serialize(storageObj)
+                    }
+                },
+                Notus.Core.Variable.NetworkType.MainNet,
+                Notus.Core.Variable.NetworkLayer.Layer1
+            );
+
+            Console.WriteLine(responseData);
+            Notus.Core.Variable.BlockResponse tmpStartObj = JsonSerializer.Deserialize<Notus.Core.Variable.BlockResponse>(responseData);
+
+            if (tmpStartObj.UID.Length > 0 && tmpStartObj.Result == Notus.Core.Variable.BlockStatusCode.AddedToQueue)
+            {
+                Console.WriteLine("Pre-Wait");
+                Thread.Sleep(4000);
+
+                bool exitWhileLoop = false;
+                while (exitWhileLoop == false)
+                {
+                    string controlResponse = Notus.Core.Function.FindAvailableNodeSync(
+                        "block/" + tmpStartObj.UID,
+                        Notus.Core.Variable.NetworkType.MainNet,
+                        Notus.Core.Variable.NetworkLayer.Layer1
+                    );
+                    Console.WriteLine(controlResponse);
+                    if (controlResponse.Length > 100)
+                    {
+                        // block oluşturulmuş demektir.
+                        exitWhileLoop = true;
+                    }
+                    else
+                    {
+                        if (errorCountForSleepTime < 10)
+                        {
+                            errorCountForSleepTime++;
+                        }
+                        else
+                        {
+                            sleepTime = 10000;
+                        }
+                        Console.WriteLine("Sleep for wait : " + sleepTime.ToString());
+                        Thread.Sleep(sleepTime);
+                    }
+                }
+            }
+            // Console.ReadLine();
+
+            int chunkSize = Notus.Core.Variable.DefaultChunkSize;
+            int chunkLength = (int)Math.Ceiling(Convert.ToDouble(fileArray.Length / chunkSize));
+            int chunk = 0;
+            for (int i = 0; i < chunkLength; i++)
+            {
+                sleepTime = 2500;
+                errorCountForSleepTime = 0;
+
+                byte[] tmpArray = new byte[chunkSize];
+                Array.Copy(fileArray, chunk, tmpArray, 0, tmpArray.Length);
+                string tmpBaseStr = System.Convert.ToBase64String(tmpArray);
+                string tmpDataStr = System.Uri.EscapeDataString(tmpBaseStr);
+                string sendDataStr = JsonSerializer.Serialize(
+                    new Notus.Core.Variable.FileChunkStruct()
+                    {
+                        Count = i,
+                        Data = tmpDataStr,
+                        UID = tmpStartObj.UID
+                    }
+                );
+                bool innerLoop = false;
+                while (innerLoop == false)
+                {
+                    string responseChunk = Notus.Core.Function.FindAvailableNodeSync(
+                        "storage/file/update",
+                        new Dictionary<string, string>() {
+                            {
+                                "data", sendDataStr
+                            }
+                        },
+                        Notus.Core.Variable.NetworkType.MainNet,
+                        Notus.Core.Variable.NetworkLayer.Layer3
+                    );
+                    Notus.Core.Variable.BlockResponse tmpChunkObj = JsonSerializer.Deserialize<Notus.Core.Variable.BlockResponse>(responseChunk);
+                    // Console.WriteLine(responseChunk);
+                    // Console.WriteLine("-------------------------");
+                    // Console.ReadLine();
+                    if (tmpChunkObj.Result == Notus.Core.Variable.BlockStatusCode.AddedToQueue)
+                    {
+                        innerLoop = true;
+                    }
+                    else
+                    {
+                        if (errorCountForSleepTime < 10)
+                        {
+                            errorCountForSleepTime++;
+                        }
+                        else
+                        {
+                            sleepTime = 10000;
+                        }
+                        Console.WriteLine("Sleep for wait : " + sleepTime.ToString());
+                        Thread.Sleep(sleepTime);
+                    }
+
+                }
+                chunk += chunkSize;
+            }
+
+            // işlemi beklemeye alıyor ve orada kalıyor.
+            // dosya yüklenince tüm dosyaları birleştir ve blok içeriğine al
+
+            bool loop = true;
+            sleepTime = 2500;
+            errorCountForSleepTime = 0;
+            while (loop)
+            {
+                string response = Notus.Core.Function.FindAvailableNodeSync(
+                    $"storage/file/status/{tmpStartObj.UID}",
+                    Notus.Core.Variable.NetworkType.MainNet,
+                    Notus.Core.Variable.NetworkLayer.Layer3
+                );
+                Notus.Core.Variable.BlockStatusCode ResStruct = JsonSerializer.Deserialize<Notus.Core.Variable.BlockStatusCode>(response);
+                if (ResStruct == Notus.Core.Variable.BlockStatusCode.Completed)
+                {
+                    loop = false;
+                }
+                else
+                {
+                    if (errorCountForSleepTime < 10)
+                    {
+                        errorCountForSleepTime++;
+                    }
+                    else
+                    {
+                        sleepTime = 10000;
+                    }
+                    Console.WriteLine("Sleep for wait : " + sleepTime.ToString());
+                    Thread.Sleep(sleepTime);
+                }
+            }
+            return Notus.Core.Variable.BlockStatusCode.Completed;
         }
+
         /// <summary>
         /// Generates new wallet and returns wallet details.
         /// </summary>
