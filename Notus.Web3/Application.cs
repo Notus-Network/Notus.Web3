@@ -71,7 +71,7 @@ namespace Notus.Web3
         /// <param name="WalletKey">Wallet key of the wallet whose balance will be shown.</param>
         /// <param name="currentNetwork">Current Network for Request.</param>
         /// <returns>Returns <see cref="Dictionary{TKey, TValue}"/>.</returns>
-        public static async Task<Dictionary<string, string>> Balance(
+        public static async Task<Dictionary<string, Dictionary<ulong, string>>> Balance(
             string WalletKey,
             Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet
         )
