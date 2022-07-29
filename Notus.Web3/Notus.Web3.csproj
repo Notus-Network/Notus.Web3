@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Authors>Omer GOKSOY</Authors>
@@ -13,7 +13,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>In this release, Nuget Library have been updated.</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>3.0.35</Version>
+    <Version>3.0.36</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Notus.Runtime" Version="1.0.25" />
+    <PackageReference Include="Notus.Core" Version="4.1.14" />
   </ItemGroup>
 
 </Project>

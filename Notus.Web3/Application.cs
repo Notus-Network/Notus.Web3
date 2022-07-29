@@ -33,14 +33,14 @@ namespace Notus.Web3
             set { Val_PrivateKeyHex = value; }
         }
         /// <summary>
-        /// Used to store wallet's local variables. Such as <see cref="Notus.Core.Variable.EccKeyPair"/>, Wallet Name, Wallet Image and Last Fetch Date.
+        /// Used to store wallet's local variables. Such as <see cref="Notus.Variable.Struct.EccKeyPair"/>, Wallet Name, Wallet Image and Last Fetch Date.
         /// </summary>
         public class LocalWalletList
         {
             /// <value>
-            /// The variable to store wallet properties. Ref: <see cref="Notus.Core.Variable.EccKeyPair"/>
+            /// The variable to store wallet properties. Ref: <see cref="Notus.Variable.Struct.EccKeyPair"/>
             /// </value>
-            public Notus.Core.Variable.EccKeyPair Wallet { get; set; }
+            public Notus.Variable.Struct.EccKeyPair Wallet { get; set; }
             /// <value>
             /// User's Wallet Name.
             /// </value>
@@ -59,11 +59,11 @@ namespace Notus.Web3
         /// Gets Currency List with given network via HTTP request. 
         /// </summary>
         /// <param name="currentNetwork">Current Network for Request.</param>
-        /// <returns>Returns <see cref="Notus.Core.Variable.CurrencyList"/>.</returns>
-        public static async Task<List<Notus.Core.Variable.CurrencyList>> GetCurrencyList(Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
+        /// <returns>Returns <see cref="Notus.Variable.Struct.CurrencyList"/>.</returns>
+        public static async Task<List<Notus.Variable.Struct.CurrencyList>> GetCurrencyList(Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet)
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("currency/list/", currentNetwork, Notus.Core.Variable.NetworkLayer.Layer1);
-            return JsonSerializer.Deserialize<List<Notus.Core.Variable.CurrencyList>>(tmpResult);
+            string tmpResult = await Notus.Network.Node.FindAvailable("currency/list/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1);
+            return JsonSerializer.Deserialize<List<Notus.Variable.Struct.CurrencyList>>(tmpResult);
         }
         /// <summary>
         /// Gets Balance with given network and wallet key via HTTP request. 
@@ -73,11 +73,11 @@ namespace Notus.Web3
         /// <returns>Returns <see cref="Dictionary{TKey, TValue}"/>.</returns>
         public static async Task<Dictionary<string, Dictionary<ulong, string>>> Balance(
             string WalletKey,
-            Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet
+            Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet
         )
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("balance/" + WalletKey + "/", currentNetwork, Notus.Core.Variable.NetworkLayer.Layer1);
-            Notus.Core.Variable.WalletBalanceStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Core.Variable.WalletBalanceStruct>(tmpResult);
+            string tmpResult = await Notus.Network.Node.FindAvailable("balance/" + WalletKey + "/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1);
+            Notus.Variable.Struct.WalletBalanceStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Variable.Struct.WalletBalanceStruct>(tmpResult);
             return tmpBalanceVal.Balance;
         }
         /// <summary>
@@ -85,26 +85,26 @@ namespace Notus.Web3
         /// </summary>
         /// <param name="WalletKey">The wallet key of the wallet to be airdropped.</param>
         /// <param name="currentNetwork">Current Network for Request.</param>
-        /// <returns>Returns <see cref="Notus.Core.Variable.CryptoTransactionResult"/>.</returns>
-        public static async Task<Notus.Core.Variable.CryptoTransactionResult> AirDrop(string WalletKey, Notus.Core.Variable.NetworkType currentNetwork = Core.Variable.NetworkType.MainNet)
+        /// <returns>Returns <see cref="Notus.Variable.Struct.CryptoTransactionResult"/>.</returns>
+        public static async Task<Notus.Variable.Struct.CryptoTransactionResult> AirDrop(string WalletKey, Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet)
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("airdrop/" + WalletKey + "/", currentNetwork, Notus.Core.Variable.NetworkLayer.Layer1);
-            Notus.Core.Variable.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.CryptoTransactionResult>(tmpResult);
+            string tmpResult = await Notus.Network.Node.FindAvailable("airdrop/" + WalletKey + "/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1);
+            Notus.Variable.Struct.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Variable.Struct.CryptoTransactionResult>(tmpResult);
             return tmpAirDrop;
         }
         /// <summary>
         /// TO DO.
         /// </summary>
-        public static async Task<Notus.Core.Variable.BlockStatusCode> GetStatus(string BlockUid, Notus.Core.Variable.NetworkType CurrentNetwork, Notus.Core.Variable.NetworkLayer CurrentLayer = Notus.Core.Variable.NetworkLayer.Layer1)
+        public static async Task<Notus.Variable.Enum.BlockStatusCode> GetStatus(string BlockUid, Notus.Variable.Enum.NetworkType CurrentNetwork, Notus.Variable.Enum.NetworkLayer CurrentLayer = Notus.Variable.Enum.NetworkLayer.Layer1)
         {
-            string tmpResult = await Notus.Core.Function.FindAvailableNode("block/status/" + BlockUid + "/", CurrentNetwork, CurrentLayer);
-            Notus.Core.Variable.BlockStatusCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Core.Variable.BlockStatusCode>(tmpResult);
+            string tmpResult = await Notus.Network.Node.FindAvailable("block/status/" + BlockUid + "/", CurrentNetwork, CurrentLayer);
+            Notus.Variable.Enum.BlockStatusCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Variable.Enum.BlockStatusCode>(tmpResult);
             return tmpAirDrop;
         }
         /// <summary>
         /// TO DO.
         /// </summary>
-        public static Notus.Core.Variable.BlockStatusCode StoreFileOnChain(string PrivateKeyHex, string FileAddress, bool LocalFile, Notus.Core.Variable.NetworkType CurrentNetwork=Core.Variable.NetworkType.MainNet)
+        public static Notus.Variable.Enum.BlockStatusCode StoreFileOnChain(string PrivateKeyHex, string FileAddress, bool LocalFile, Notus.Variable.Enum.NetworkType CurrentNetwork= Notus.Variable.Enum.NetworkType.MainNet)
         {
             int sleepTime = 2500;
             byte errorCountForSleepTime = 0;
@@ -137,15 +137,15 @@ namespace Notus.Web3
             byte[] fileArray = ms.ToArray();
             uint fileSize = (uint)ms.Length;
 
-            Notus.Core.Variable.StorageOnChainStruct storageObj = new Notus.Core.Variable.StorageOnChainStruct()
+            Notus.Variable.Struct.StorageOnChainStruct storageObj = new Notus.Variable.Struct.StorageOnChainStruct()
             {
                 Name = fileName,
                 Size = fileSize,
                 Hash = new Notus.Hash().CommonHash("sasha", ms.ToArray()),
                 Encrypted = false,
-                PublicKey = Notus.Core.Wallet.ID.Generate(PrivateKeyHex),
+                PublicKey = Notus.Wallet.ID.Generate(PrivateKeyHex),
                 Sign = "",
-                Balance = new Notus.Core.Variable.BalanceAfterBlockStruct()
+                Balance = new Notus.Variable.Struct.BalanceAfterBlockStruct()
                 {
                     Wallet = "",
                     Balance = new Dictionary<string, string>(),
@@ -154,9 +154,9 @@ namespace Notus.Web3
                     UID = ""
                 }
             };
-            storageObj.Sign = Notus.Core.Wallet.ID.Sign(Notus.Core.MergeRawData.StorageOnChain(storageObj), PrivateKeyHex);
+            storageObj.Sign = Notus.Wallet.ID.Sign(Notus.Core.MergeRawData.StorageOnChain(storageObj), PrivateKeyHex);
 
-            string responseData = Notus.Core.Function.FindAvailableNodeSync(
+            string responseData = Notus.Network.Node.FindAvailableSync(
                 "storage/file/new",
                 new Dictionary<string, string>()
                 {
@@ -165,14 +165,14 @@ namespace Notus.Web3
                         JsonSerializer.Serialize(storageObj)
                     }
                 },
-                Notus.Core.Variable.NetworkType.MainNet,
-                Notus.Core.Variable.NetworkLayer.Layer1
+                Notus.Variable.Enum.NetworkType.MainNet,
+                Notus.Variable.Enum.NetworkLayer.Layer1
             );
 
             Console.WriteLine(responseData);
-            Notus.Core.Variable.BlockResponse tmpStartObj = JsonSerializer.Deserialize<Notus.Core.Variable.BlockResponse>(responseData);
+            Notus.Variable.Struct.BlockResponse tmpStartObj = JsonSerializer.Deserialize<Notus.Variable.Struct.BlockResponse>(responseData);
 
-            if (tmpStartObj.UID.Length > 0 && tmpStartObj.Result == Notus.Core.Variable.BlockStatusCode.AddedToQueue)
+            if (tmpStartObj.UID.Length > 0 && tmpStartObj.Result == Notus.Variable.Enum.BlockStatusCode.AddedToQueue)
             {
                 Console.WriteLine("Pre-Wait");
                 Thread.Sleep(4000);
@@ -180,10 +180,10 @@ namespace Notus.Web3
                 bool exitWhileLoop = false;
                 while (exitWhileLoop == false)
                 {
-                    string controlResponse = Notus.Core.Function.FindAvailableNodeSync(
+                    string controlResponse = Notus.Network.Node.FindAvailableSync(
                         "block/" + tmpStartObj.UID,
-                        Notus.Core.Variable.NetworkType.MainNet,
-                        Notus.Core.Variable.NetworkLayer.Layer1
+                        Notus.Variable.Enum.NetworkType.MainNet,
+                        Notus.Variable.Enum.NetworkLayer.Layer1
                     );
                     Console.WriteLine(controlResponse);
                     if (controlResponse.Length > 100)
@@ -208,8 +208,8 @@ namespace Notus.Web3
             }
             // Console.ReadLine();
 
-            int chunkSize = Notus.Core.Variable.DefaultChunkSize;
-            int chunkLength = (int)Math.Ceiling(Convert.ToDouble(fileArray.Length / chunkSize));
+            int chunkSize = Notus.Variable.Constant.DefaultChunkSize;
+            int chunkLength = (int)Math.Ceiling(System.Convert.ToDouble(fileArray.Length / chunkSize));
             int chunk = 0;
             for (int i = 0; i < chunkLength; i++)
             {
@@ -221,7 +221,7 @@ namespace Notus.Web3
                 string tmpBaseStr = System.Convert.ToBase64String(tmpArray);
                 string tmpDataStr = System.Uri.EscapeDataString(tmpBaseStr);
                 string sendDataStr = JsonSerializer.Serialize(
-                    new Notus.Core.Variable.FileChunkStruct()
+                    new Notus.Variable.Struct.FileChunkStruct()
                     {
                         Count = i,
                         Data = tmpDataStr,
@@ -231,21 +231,21 @@ namespace Notus.Web3
                 bool innerLoop = false;
                 while (innerLoop == false)
                 {
-                    string responseChunk = Notus.Core.Function.FindAvailableNodeSync(
+                    string responseChunk = Notus.Network.Node.FindAvailableSync(
                         "storage/file/update",
                         new Dictionary<string, string>() {
                             {
                                 "data", sendDataStr
                             }
                         },
-                        Notus.Core.Variable.NetworkType.MainNet,
-                        Notus.Core.Variable.NetworkLayer.Layer3
+                        Notus.Variable.Enum.NetworkType.MainNet,
+                        Notus.Variable.Enum.NetworkLayer.Layer3
                     );
-                    Notus.Core.Variable.BlockResponse tmpChunkObj = JsonSerializer.Deserialize<Notus.Core.Variable.BlockResponse>(responseChunk);
+                    Notus.Variable.Struct.BlockResponse tmpChunkObj = JsonSerializer.Deserialize<Notus.Variable.Struct.BlockResponse>(responseChunk);
                     // Console.WriteLine(responseChunk);
                     // Console.WriteLine("-------------------------");
                     // Console.ReadLine();
-                    if (tmpChunkObj.Result == Notus.Core.Variable.BlockStatusCode.AddedToQueue)
+                    if (tmpChunkObj.Result == Notus.Variable.Enum.BlockStatusCode.AddedToQueue)
                     {
                         innerLoop = true;
                     }
@@ -275,13 +275,13 @@ namespace Notus.Web3
             errorCountForSleepTime = 0;
             while (loop)
             {
-                string response = Notus.Core.Function.FindAvailableNodeSync(
+                string response = Notus.Network.Node.FindAvailableSync(
                     $"storage/file/status/{tmpStartObj.UID}",
-                    Notus.Core.Variable.NetworkType.MainNet,
-                    Notus.Core.Variable.NetworkLayer.Layer3
+                    Notus.Variable.Enum.NetworkType.MainNet,
+                    Notus.Variable.Enum.NetworkLayer.Layer3
                 );
-                Notus.Core.Variable.BlockStatusCode ResStruct = JsonSerializer.Deserialize<Notus.Core.Variable.BlockStatusCode>(response);
-                if (ResStruct == Notus.Core.Variable.BlockStatusCode.Completed)
+                Notus.Variable.Enum.BlockStatusCode ResStruct = JsonSerializer.Deserialize<Notus.Variable.Enum.BlockStatusCode>(response);
+                if (ResStruct == Notus.Variable.Enum.BlockStatusCode.Completed)
                 {
                     loop = false;
                 }
@@ -299,34 +299,16 @@ namespace Notus.Web3
                     Thread.Sleep(sleepTime);
                 }
             }
-            return Notus.Core.Variable.BlockStatusCode.Completed;
+            return Notus.Variable.Enum.BlockStatusCode.Completed;
         }
 
         /// <summary>
         /// Generates new wallet and returns wallet details.
         /// </summary>
-        /// <returns>Returns <see cref="Notus.Core.Variable.EccKeyPair"/>.</returns>
-        public static Notus.Core.Variable.EccKeyPair GenerateKeyPair()
+        /// <returns>Returns <see cref="Notus.Variable.Struct.EccKeyPair"/>.</returns>
+        public static Notus.Variable.Struct.EccKeyPair GenerateKeyPair()
         {
-            return Notus.Core.Wallet.ID.GenerateKeyPair();
+            return Notus.Wallet.ID.GenerateKeyPair();
         }
-        /// <summary>
-        /// It performs token generate operation with the given wallet address and network type via HTTP request.
-        /// </summary>
-        /// <param name="PrivateKeyHex">Private key of the main wallet.</param>
-        /// <param name="Obj_TokenInfo">The local variable to store name, tag and logo variables.</param>
-        /// <param name="Obj_TokenSupply">The local variable to store supply, decimal and resupplyable variables.</param>
-        /// <param name="currentNetwork">Current Network for Request.</param>
-        /// <returns>Returns <see cref="Notus.Core.Variable.BlockResponseStruct"/>.</returns>
-        public static async Task<Notus.Core.Variable.BlockResponseStruct> GenerateToken(string PrivateKeyHex, Notus.Core.Variable.TokenInfoStruct Obj_TokenInfo, Notus.Core.Variable.SupplyStruct Obj_TokenSupply, Notus.Core.Variable.NetworkType currentNetwork)
-        {
-            string PublicKeyHex = Notus.Core.Wallet.ID.Generate(PrivateKeyHex);
-            string TokenRawDataForSignText = Notus.Core.MergeRawData.TokenGenerate(PublicKeyHex, Obj_TokenInfo, Obj_TokenSupply);
-            string SignText = Notus.Core.Wallet.ID.Sign(TokenRawDataForSignText, PrivateKeyHex);
-
-            Notus.Core.Variable.BlockResponseStruct TokenResult = await Notus.Core.Prepare.Token.Generate(PublicKeyHex, SignText, Obj_TokenInfo, Obj_TokenSupply, currentNetwork);
-            return TokenResult;
-        }
-
     }
 }
