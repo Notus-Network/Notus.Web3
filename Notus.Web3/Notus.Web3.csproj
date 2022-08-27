@@ -13,7 +13,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReleaseNotes>In this release, Nuget Library have been updated.</PackageReleaseNotes>
     <Description>This library contains Web3 dApp required for Notus.Network developers.</Description>
-    <Version>3.0.36</Version>
+    <Version>3.0.37</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Notus.Core" Version="4.1.14" />
+    <PackageReference Include="Notus.Core" Version="4.1.20" />
   </ItemGroup>
 
 </Project>

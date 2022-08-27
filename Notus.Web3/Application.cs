@@ -60,9 +60,9 @@ namespace Notus.Web3
         /// </summary>
         /// <param name="currentNetwork">Current Network for Request.</param>
         /// <returns>Returns <see cref="Notus.Variable.Struct.CurrencyList"/>.</returns>
-        public static async Task<List<Notus.Variable.Struct.CurrencyList>> GetCurrencyList(Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet)
+        public static async Task<List<Notus.Variable.Struct.CurrencyList>> GetCurrencyList(Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet, bool isSsl = false)
         {
-            string tmpResult = await Notus.Network.Node.FindAvailable("currency/list/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1);
+            string tmpResult = await Notus.Network.Node.FindAvailable("currency/list/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1, isSsl);
             return JsonSerializer.Deserialize<List<Notus.Variable.Struct.CurrencyList>>(tmpResult);
         }
         /// <summary>
@@ -73,10 +73,10 @@ namespace Notus.Web3
         /// <returns>Returns <see cref="Dictionary{TKey, TValue}"/>.</returns>
         public static async Task<Dictionary<string, Dictionary<ulong, string>>> Balance(
             string WalletKey,
-            Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet
+            Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet, bool isSsl = false
         )
         {
-            string tmpResult = await Notus.Network.Node.FindAvailable("balance/" + WalletKey + "/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1);
+            string tmpResult = await Notus.Network.Node.FindAvailable("balance/" + WalletKey + "/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1, isSsl);
             Notus.Variable.Struct.WalletBalanceStruct tmpBalanceVal = JsonSerializer.Deserialize<Notus.Variable.Struct.WalletBalanceStruct>(tmpResult);
             return tmpBalanceVal.Balance;
         }
@@ -86,25 +86,25 @@ namespace Notus.Web3
         /// <param name="WalletKey">The wallet key of the wallet to be airdropped.</param>
         /// <param name="currentNetwork">Current Network for Request.</param>
         /// <returns>Returns <see cref="Notus.Variable.Struct.CryptoTransactionResult"/>.</returns>
-        public static async Task<Notus.Variable.Struct.CryptoTransactionResult> AirDrop(string WalletKey, Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet)
+        public static async Task<Notus.Variable.Struct.CryptoTransactionResult> AirDrop(string WalletKey, Notus.Variable.Enum.NetworkType currentNetwork = Notus.Variable.Enum.NetworkType.MainNet, bool isSsl = false)
         {
-            string tmpResult = await Notus.Network.Node.FindAvailable("airdrop/" + WalletKey + "/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1);
+            string tmpResult = await Notus.Network.Node.FindAvailable("airdrop/" + WalletKey + "/", currentNetwork, Notus.Variable.Enum.NetworkLayer.Layer1, isSsl);
             Notus.Variable.Struct.CryptoTransactionResult tmpAirDrop = JsonSerializer.Deserialize<Notus.Variable.Struct.CryptoTransactionResult>(tmpResult);
             return tmpAirDrop;
         }
         /// <summary>
         /// TO DO.
         /// </summary>
-        public static async Task<Notus.Variable.Enum.BlockStatusCode> GetStatus(string BlockUid, Notus.Variable.Enum.NetworkType CurrentNetwork, Notus.Variable.Enum.NetworkLayer CurrentLayer = Notus.Variable.Enum.NetworkLayer.Layer1)
+        public static async Task<Notus.Variable.Enum.BlockStatusCode> GetStatus(string BlockUid, Notus.Variable.Enum.NetworkType CurrentNetwork, Notus.Variable.Enum.NetworkLayer CurrentLayer = Notus.Variable.Enum.NetworkLayer.Layer1, bool isSsl = false)
         {
-            string tmpResult = await Notus.Network.Node.FindAvailable("block/status/" + BlockUid + "/", CurrentNetwork, CurrentLayer);
+            string tmpResult = await Notus.Network.Node.FindAvailable("block/status/" + BlockUid + "/", CurrentNetwork, CurrentLayer, isSsl);
             Notus.Variable.Enum.BlockStatusCode tmpAirDrop = JsonSerializer.Deserialize<Notus.Variable.Enum.BlockStatusCode>(tmpResult);
             return tmpAirDrop;
         }
         /// <summary>
         /// TO DO.
         /// </summary>
-        public static Notus.Variable.Enum.BlockStatusCode StoreFileOnChain(string PrivateKeyHex, string FileAddress, bool LocalFile, Notus.Variable.Enum.NetworkType CurrentNetwork= Notus.Variable.Enum.NetworkType.MainNet)
+        public static Notus.Variable.Enum.BlockStatusCode StoreFileOnChain(string PrivateKeyHex, string FileAddress, bool LocalFile, Notus.Variable.Enum.NetworkType CurrentNetwork= Notus.Variable.Enum.NetworkType.MainNet, bool isSsl = false)
         {
             int sleepTime = 2500;
             byte errorCountForSleepTime = 0;
